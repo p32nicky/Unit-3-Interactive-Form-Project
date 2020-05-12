@@ -6,16 +6,17 @@ document.getElementById('other-job').style.display = 'none';
 //Disable Color dropdown and set initial text
 
 const colorPick = document.getElementById('color');
-colorPick.disabled = true;
-colorPick.add("Pick Your Theme First");
 
-//Tshirt Color Function
-var colorDefault = document.getElementById('design');
-colorDefault.size = 0;
+//Default Options for Colors Function
 
+for(i = 0; i<=colorPick.length; i++){
+  colorPick.remove(i);
+}
+//colorPick.add("Pick Your Theme First");
+
+//Event listener for change to the job role. Then sends to function titleTest
 var e = document.getElementById("title");
 e.addEventListener("change", titleTest);
-//Event listener for change to the job role. Then sends to function titleTest
 
 function titleTest(){
   let jobTitle = e.options[e.selectedIndex].text;
@@ -26,9 +27,8 @@ function titleTest(){
 };
 
 
-colorDefault.addEventListener("change", showColors)
+colorPick.addEventListener("change", showColors)
 
 function showColors(){
   colorPick.remove("Pick Your Theme First");
-  document.getElementById('color').disabled = false;
 }
