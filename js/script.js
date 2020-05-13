@@ -6,18 +6,22 @@ document.getElementById('other-job').style.display = 'none';
 //Disable Color dropdown and set initial text
 
 const colorPick = document.getElementById('color');
+const colorPick2 = document.getElementById('color');
+const designPick = document.getElementById('design');
 
-//Default Options for Colors Function
-
-for(i = 0; i<=colorPick.length; i++){
-  colorPick.remove(i);
+//Removes all existing options in color pick section until theme is chosen
+for(i = 0; i=colorPick.length; i++){
+  colorPick.remove(colorPick.i);
 }
-//colorPick.add("Pick Your Theme First");
+var option = document.createElement("option");
+option.text = "Pick Your Theme First";
+colorPick.add(option);
 
 //Event listener for change to the job role. Then sends to function titleTest
 var e = document.getElementById("title");
 e.addEventListener("change", titleTest);
 
+//Job title if other function
 function titleTest(){
   let jobTitle = e.options[e.selectedIndex].text;
   //If the jobTitle is other it will show the hidden div.
@@ -26,9 +30,16 @@ function titleTest(){
   }
 };
 
-
-colorPick.addEventListener("change", showColors)
+designPick.addEventListener("change", showColors)
 
 function showColors(){
-  colorPick.remove("Pick Your Theme First");
+    colorPick.remove();
+    const designTheme = document.getElementById("design").value;
+    if(designTheme == 'js puns'){
+      var opt = document.createElement("option");
+      colorPick.add(opt, colorPick2[1]);
+    }
+    else if (designTheme == 'heart js'){
+
+    }
 }
