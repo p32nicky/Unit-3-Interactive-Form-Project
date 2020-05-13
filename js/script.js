@@ -7,6 +7,7 @@ document.getElementById('other-job').style.display = 'none';
 
 const colorPick = document.getElementById('color');
 const colorPick2 = document.getElementById('color');
+
 const designPick = document.getElementById('design');
 
 //Removes all existing options in color pick section until theme is chosen
@@ -31,13 +32,21 @@ function titleTest(){
 };
 
 designPick.addEventListener("change", showColors)
+console.log(colorPick2);
 
 function showColors(){
-    colorPick.remove();
+    colorPick.options[0] = null;
     const designTheme = document.getElementById("design").value;
     if(designTheme == 'js puns'){
-      var opt = document.createElement("option");
-      colorPick.add(opt, colorPick2[1]);
+      colorPick.options[0] = null;
+
+      let newOption = new Option(colorPick2,'Option Value');
+      colorPick.add(newOption,undefined);
+
+
+
+
+
     }
     else if (designTheme == 'heart js'){
 
