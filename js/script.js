@@ -1,5 +1,14 @@
+//Color DOM Objects
 const colorPick = document.getElementById('color');
 const designPick = document.getElementById('design');
+
+//Activities DOM objects and price caculator
+const activities = document.getElementsByClassName("activities");
+var costLabel = document.createElement('h1');
+var cost = document.createElement('h1');
+var checkboxes = document.querySelectorAll('input[type=checkbox]');
+let value = 0;
+
 
 //Function to remove all existing color options:
 //Found help here - https://stackoverflow.com/questions/3364493/how-do-i-clear-all-options-in-a-dropdown-box
@@ -43,38 +52,56 @@ designPick.addEventListener("change", showColors);
 function showColors(){
     const designTheme = document.getElementById("design").value;
     if(designTheme == 'js puns'){
-
       clearColor();
-
       var newOption1 = document.createElement("option");
       newOption1.text = ("Cornflower Blue (JS Puns shirt only");
       colorPick.add(newOption1, colorPick[1]);
-
       var newOption2 = document.createElement("option");
       newOption2.text = ("Dark Slate Grey (JS Puns shirt only)");
       colorPick.add(newOption2, colorPick[2]);
-
       var newOption3 = document.createElement("option");
       newOption3.text = ("Gold (JS Puns shirt only)");
       colorPick.add(newOption3, colorPick[3]);
     }
 
     else if (designTheme == 'heart js'){
-
       clearColor();
-
       var newOption1 = document.createElement("option");
       newOption1.text = ("Tomato (I " + `\u2764` + "JS shirt only)");
       colorPick.add(newOption1, colorPick[1]);
-
       var newOption2 = document.createElement("option");
       newOption2.text = ("Steel Blue (I " + `\u2764` + "JS shirt only)");
       colorPick.add(newOption2, colorPick[2]);
-
       var newOption3 = document.createElement("option");
       newOption3.text = ("Dim Grey (I " + `\u2764` + "JS shirt only)");
       colorPick.add(newOption3, colorPick[3]);
 
-
   }
 }
+
+//click listener for when checkbox is changed - run display label and cost
+// Get all the checkboxes on the page and put click listener
+//Display Label for activities cost - Only display is value > 0
+
+for(var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].addEventListener('change', function(){
+
+      //Get checkbox value and add to value calculator
+      const checkboxes = document.querySelectorAll(`input[name="all"]:checked`);
+          let values = [];
+          checkboxes.forEach((checkbox) => {
+              values.push(checkbox.value);
+          });
+      });
+      console.log(value);
+
+
+      if (value > 0){
+        costLabel.innerHTML = '';
+        cost.innerHTML = '';
+        costLabel.innerHTML = "Your Cost For the Conference Will Be:";
+        document.getElementById("activities").appendChild(costLabel);
+        cost.innerHTML = ('$' + value);
+        document.getElementById("activities").appendChild(cost);
+      }
+    };
