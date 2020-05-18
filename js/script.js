@@ -7,6 +7,9 @@ const activities = document.getElementsByClassName("activities");
 var checkboxes = document.querySelectorAll('input[type=checkbox]');
 let value = 0;
 
+let activitySection = document.querySelector('.activities');
+let costLabel = document.createElement('h1') ;
+let cost = document.createElement('h1');
 
 //Function to remove all existing color options:
 //Found help here - https://stackoverflow.com/questions/3364493/how-do-i-clear-all-options-in-a-dropdown-box
@@ -80,25 +83,29 @@ function showColors(){
 //Event click listener for when checkbox is changed
 
 for(var i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].addEventListener('change', function(e){
-        checkboxes = document.querySelector('.activities');
-        let clicked = e.target; //var to store the clicked checkbox input
-        let clickedCost = clicked.getAttribute(`data-cost`); //stores the clicked checkbox data-cost attribute in "clickedCost"
-        value += parseInt(clickedCost);
-        console.log(value);
-        printTotal(value);
-      });
-    };
+  checkboxes[i].addEventListener('change', function(e){
+    let clicked = e.target; //var to store the clicked checkbox input
+    let clickedCost = clicked.getAttribute(`data-cost`); //stores the clicked checkbox data-cost attribute in "clickedCost"
+        //console.log(value);
+    if(clicked.checked){
+      value += parseInt(clickedCost);
+    } else {
+    // If unclicked, subtract the value from the activityTotal
+    value -= parseInt(clickedCost);
+    }
+    printTotal(value);
+  });
+};
 
     //Display Label for activities cost - Only display is value > 0
 function printTotal(value){
-    const activitySection = document.getElementById('.activites')
-    let costLabel = document.createElement('label') ;
-    costLabel.innerHTML = "Your Cost For the Conference Will Be:"
-    const cost = document.createElement('label');
+
+
+    costLabel.innerHTML = ("Your Cost For the Conference Will Be:");
     cost.innerHTML = ('$' + value);
-    console.log(costLabel);
-    console.log(cost);
+    //console.log(costLabel);
+    //console.log(cost);
+    //console.log(activitySection);
     activitySection.appendChild(costLabel);
     activitySection.appendChild(cost);
 }
