@@ -4,8 +4,6 @@ const designPick = document.getElementById('design');
 
 //Activities DOM objects and price caculator
 const activities = document.getElementsByClassName("activities");
-var costLabel = document.createElement('h1');
-var cost = document.createElement('h1');
 var checkboxes = document.querySelectorAll('input[type=checkbox]');
 let value = 0;
 
@@ -86,20 +84,21 @@ for(var i = 0; i < checkboxes.length; i++) {
         checkboxes = document.querySelector('.activities');
         let clicked = e.target; //var to store the clicked checkbox input
         let clickedCost = clicked.getAttribute(`data-cost`); //stores the clicked checkbox data-cost attribute in "clickedCost"
-        let clickedDateTime = clicked.getAttribute(`data-day-and-time`);
-        value = value + parseInt(clickedCost);
-        printTotal();
+        value += parseInt(clickedCost);
+        console.log(value);
+        printTotal(value);
       });
     };
 
     //Display Label for activities cost - Only display is value > 0
 function printTotal(value){
-  if(value > 0 ){
-  costLabel.innerHTML = '';
-  cost.innerHTML = '';
-  costLabel.innerHTML = "Your Cost For the Conference Will Be:";
-  document.getElementById("activities").appendChild(costLabel);
-  cost.innerHTML = ('$' + value);
-  document.getElementById("activities").appendChild(cost);
-  }
+    const activitySection = document.getElementById('.activites')
+    let costLabel = document.createElement('label') ;
+    costLabel.innerHTML = "Your Cost For the Conference Will Be:"
+    const cost = document.createElement('label');
+    cost.innerHTML = ('$' + value);
+    console.log(costLabel);
+    console.log(cost);
+    activitySection.appendChild(costLabel);
+    activitySection.appendChild(cost);
 }
