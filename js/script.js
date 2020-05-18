@@ -79,29 +79,27 @@ function showColors(){
   }
 }
 
-//click listener for when checkbox is changed - run display label and cost
-// Get all the checkboxes on the page and put click listener
-//Display Label for activities cost - Only display is value > 0
+//Event click listener for when checkbox is changed
 
 for(var i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].addEventListener('change', function(){
-
-      //Get checkbox value and add to value calculator
-      const checkboxes = document.querySelectorAll(`input[name="all"]:checked`);
-          let values = [];
-          checkboxes.forEach((checkbox) => {
-              values.push(checkbox.value);
-          });
+      checkboxes[i].addEventListener('change', function(e){
+        checkboxes = document.querySelector('.activities');
+        let clicked = e.target; //var to store the clicked checkbox input
+        let clickedCost = clicked.getAttribute(`data-cost`); //stores the clicked checkbox data-cost attribute in "clickedCost"
+        let clickedDateTime = clicked.getAttribute(`data-day-and-time`);
+        value = value + parseInt(clickedCost);
+        printTotal();
       });
-      console.log(value);
-
-
-      if (value > 0){
-        costLabel.innerHTML = '';
-        cost.innerHTML = '';
-        costLabel.innerHTML = "Your Cost For the Conference Will Be:";
-        document.getElementById("activities").appendChild(costLabel);
-        cost.innerHTML = ('$' + value);
-        document.getElementById("activities").appendChild(cost);
-      }
     };
+
+    //Display Label for activities cost - Only display is value > 0
+function printTotal(value){
+  if(value > 0 ){
+  costLabel.innerHTML = '';
+  cost.innerHTML = '';
+  costLabel.innerHTML = "Your Cost For the Conference Will Be:";
+  document.getElementById("activities").appendChild(costLabel);
+  cost.innerHTML = ('$' + value);
+  document.getElementById("activities").appendChild(cost);
+  }
+}
