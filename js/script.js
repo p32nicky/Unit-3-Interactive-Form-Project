@@ -15,6 +15,10 @@ let cost = document.createElement('h1');
 //Set focus on first input field
 document.getElementById('name').focus();
 
+//HIDE COLOR DIV UNTIL A THEME IS SELECTED
+const colorDiv = document.getElementById("colors-js-puns");
+colorDiv.hidden = true;
+
 //BASIC INFO
 //First hide the Div containing other job label and text input
 document.getElementById('other-job').style.display = 'none';
@@ -56,6 +60,7 @@ designPick.addEventListener("change", showColors);
 function showColors(){
   const designTheme = document.getElementById("design");
   if(designTheme.value == 'js puns'){
+    colorDiv.hidden = false;
     colorPick[0].hidden = true;
     colorPick[1].hidden = false;
     colorPick[2].hidden = false;
@@ -65,6 +70,7 @@ function showColors(){
     colorPick[6].hidden = true;
 
   } else if (designTheme.value == 'heart js'){
+    colorDiv.hidden = false;
     colorPick[0].hidden = true;
     colorPick[1].hidden = true;
     colorPick[2].hidden = true;
@@ -75,6 +81,8 @@ function showColors(){
 
 //ERROR HANDLER IF USER GOES BACK TO SELECT THEME AFTER SELECTING OTHER OPTIONS
   }else if (designTheme.value == 'Select Theme'){
+    colorDiv.hidden = false;
+
     colorPick[0].hidden = false;
     colorPick[0].selected = true;
     colorPick[1].hidden = true;
@@ -167,3 +175,11 @@ paymentMethod.addEventListener('change', function(e){
   //BITCOIN
   }
 });
+
+
+//ERROR HANDLER
+let registerButton = document.querySelector('button[type="submit"]')
+
+registerButton.onclick = function(){
+  alert('fuck');
+};
