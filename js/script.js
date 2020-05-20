@@ -10,6 +10,7 @@ let value = 0;
 //Total Labels
 let activitySection = document.querySelector('.activities');
 let costLabel = document.createElement('h1') ;
+const actWarning = document.createElement('h1') ;
 let cost = document.createElement('h1');
 
 //Set focus on first input field
@@ -49,6 +50,7 @@ var option = document.createElement("option");
   for (let i = 0; i < selectColorOptions.length; i++) {
     colorPick[i].hidden = true;
   }
+
 //INSERT NEW DEFAULT OPTION
   colorPick.insertBefore(option, colorPick[0]);
   colorPick[0].selected = true;
@@ -150,8 +152,8 @@ creditDiv.hidden = true;
 paypalDiv.hidden = true;
 bitcoinDiv.hidden = true;
 
+//CHECK PAYMENT METHOD CHANGE AND SHOW / HIDE DIVS
 paymentMethod.addEventListener('change', function(e){
-//CHANGE TOTAL VALUE FOR MUSTBECORRECT FOR ERROR HANDLER
 
 //CREDIT CARD
   const eventTarget = e.target.value;
@@ -218,22 +220,30 @@ form.addEventListener("submit", (e) => {
 });
 
 //REGISTER BUTTON CLICK LISTNER - CHECKS IF ALL FIELDS ARE CORRECT AND TOTOALCORRECT = 5
-const actWarning = document.createElement('h1') ;
 registerButton.addEventListener("click", (f) => {
-totalCorrect -=1;
+actWarning.innerHTML = "";
 
-if(paymentMethod.value == paymentMethod[0].value){
-  alert('Choose a payment method first');
-}
-
-if(activitiesCheck != true){
+//ENSURE AT LEAST 1 ACTIVITY IS CHOSEN
+let checkCounter = 0;
+for (let i = 0; i < checkboxes.length; i++) {
+  if (checkboxes[i].checked) {
+      checkCounter += 1;
+    }
+  }
+if(checkCounter >=1){
   totalCorrect +=1;
-}else{
+}
+if (checkCounter == 0){
   activitySection.appendChild(actWarning);
   actWarning.innerHTML = "You need to select at least 1 activity";
 }
 
-  //IF ALL OBJECTS ARE NOT CORRRECT PRevent
+//CHECK PAYMENT METHOD
+if(paymentMethod.value == paymentMethod[0].value){
+  alert('Choose a payment method first');
+}
+
+//IF ALL FIELDS CORRECT OR NOT
   if (totalCorrect == mustBeCorrect){
     alert("Congratulations on your purchase, we hope you enjoy!");
   }
@@ -242,26 +252,21 @@ if(activitiesCheck != true){
   }
 });
 
-nameInput.addEventListener("focus", nameError);
-nameInput.addEventListener("blur", nameColor);
-
-emailInput.addEventListener("focus", emailError);
-ccNum.addEventListener("focus", ccNumError);
-zip.addEventListener("focus", ccZipError);
+nameInput.addEventListener("blur", nameError);
+emailInput.addEventListener("blur", emailError);
+ccNum.addEventListener("blur", ccNumError);
+zip.addEventListener("blur", ccZipError);
+cvv.addEventListener("blur", cvvError);
 
 //NAME ERROR HANDLER
 function nameError(){
   const nameRegex = (/^[a-zA-Z ]{2,30}/);
   let nameResult = false;
   if (nameRegex.test(nameInput.value)) {
-    nameResult = true;
-    return nameResult;
+        nameResult = true;
   } else {
-    nameError = false;
-    return nameResult;
+    nameResult = false;
   }
-}
-function nameColor(nameResult){
   if (nameResult == true){
     nameInput.style.borderColor = "green";
     totalCorrect += 1;
@@ -269,7 +274,6 @@ function nameColor(nameResult){
     nameInput.style.borderColor = "red";
   };
 }
-
 
 //CC NUM ERROR HANDLER
 function ccNumError(){
@@ -286,7 +290,9 @@ function ccNumError(){
   } else if (ccResult == false){
     ccNum.style.borderColor = "red";
   };
+
 }
+
 
 //CC ZIP CODE ERROR HANDLER
 function ccZipError(){
@@ -338,16 +344,3 @@ function emailError(){
     emailInput.style.borderColor = "red";
   };
 }
-
-
-//CHECK AT LEAST ONE ACTIVITY IS CHECKED
-
-function activitiesError(){
-  for (let i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
-      return true;
-    }else {
-     return false;
-    }
-  }
-};
