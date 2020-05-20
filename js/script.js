@@ -151,12 +151,15 @@ paypalDiv.hidden = true;
 bitcoinDiv.hidden = true;
 
 paymentMethod.addEventListener('change', function(e){
+//CHANGE TOTAL VALUE FOR MUSTBECORRECT FOR ERROR HANDLER
+
 //CREDIT CARD
   const eventTarget = e.target.value;
   if(eventTarget === paymentMethod[1].value){
   creditDiv.hidden =  false;
   paypalDiv.hidden = true;
   bitcoinDiv.hidden = true;
+  mustBeCorrect = 6;
 //PAYPAL
 } else if(eventTarget === paymentMethod[2].value){
     creditDiv.hidden =  true;
@@ -176,10 +179,175 @@ paymentMethod.addEventListener('change', function(e){
   }
 });
 
-
 //ERROR HANDLER
-let registerButton = document.querySelector('button[type="submit"]')
+const form = document.querySelector("form");
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("mail");
+const ccNum = document.getElementById("cc-num");
+const zip = document.getElementById("zip");
+const cvv = document.getElementById("cvv");
 
-registerButton.onclick = function(){
-  alert('fuck');
+
+const activitiesCheck = document.querySelectorAll(".activities input");
+
+const expMonth = document.getElementById("exp-month");
+const expYear = document.getElementById("exp-year");
+const defaultOptionMonth = document.createElement("option");
+const defaultOptionYear= document.createElement("option");
+
+const registerButton = document.querySelector('button[type="submit"]')
+let totalCorrect = 0;
+let mustBeCorrect = 3;
+
+defaultOptionMonth.text = ("Pick Your Month");
+expMonth.insertBefore(defaultOptionMonth, expMonth[0]);
+expMonth[0].selected = true;
+
+defaultOptionYear.text = ("Pick Your Year");
+expYear.insertBefore(defaultOptionYear, expYear[0]);
+expYear[0].selected = true;
+
+
+//PREVENT FORM DEFAULT SUBMIT ON EACH FIELD
+form.addEventListener("submit", (e) => {
+  e.preventDefault(nameInput);
+  e.preventDefault(emailInput);
+  e.preventDefault(ccNum);
+  e.preventDefault(zip);
+  e.preventDefault(cvv);
+});
+
+//REGISTER BUTTON CLICK LISTNER - CHECKS IF ALL FIELDS ARE CORRECT AND TOTOALCORRECT = 5
+const actWarning = document.createElement('h1') ;
+registerButton.addEventListener("click", (f) => {
+totalCorrect -=1;
+
+if(paymentMethod.value == paymentMethod[0].value){
+  alert('Choose a payment method first');
+}
+
+if(activitiesCheck != true){
+  totalCorrect +=1;
+}else{
+  activitySection.appendChild(actWarning);
+  actWarning.innerHTML = "You need to select at least 1 activity";
+}
+
+  //IF ALL OBJECTS ARE NOT CORRRECT PRevent
+  if (totalCorrect == mustBeCorrect){
+    alert("Congratulations on your purchase, we hope you enjoy!");
+  }
+  else{
+    alert("You haven't filled out all of the fields correctly yet. Please try again.")
+  }
+});
+
+nameInput.addEventListener("focus", nameError);
+nameInput.addEventListener("blur", nameColor);
+
+emailInput.addEventListener("focus", emailError);
+ccNum.addEventListener("focus", ccNumError);
+zip.addEventListener("focus", ccZipError);
+
+//NAME ERROR HANDLER
+function nameError(){
+  const nameRegex = (/^[a-zA-Z ]{2,30}/);
+  let nameResult = false;
+  if (nameRegex.test(nameInput.value)) {
+    nameResult = true;
+    return nameResult;
+  } else {
+    nameError = false;
+    return nameResult;
+  }
+}
+function nameColor(nameResult){
+  if (nameResult == true){
+    nameInput.style.borderColor = "green";
+    totalCorrect += 1;
+  } else if (nameResult == false){
+    nameInput.style.borderColor = "red";
+  };
+}
+
+
+//CC NUM ERROR HANDLER
+function ccNumError(){
+  const ccRegex = (/^(?:4[0-9]{12}(?:[0-9]{3})?)/) || (/^(?:5[1-5][0-9]{14})/) || (/^(?:3[47][0-9]{13})/) || (/^(?:6(?:011|5[0-9][0-9])[0-9]{12})/);
+  let ccResult = false;
+  if (ccRegex.test(ccNum.value)) {
+        ccResult = true;
+  } else {
+    ccResult = false;
+  }
+  if (ccResult == true){
+    ccNum.style.borderColor = "green";
+    totalCorrect += 1;
+  } else if (ccResult == false){
+    ccNum.style.borderColor = "red";
+  };
+}
+
+//CC ZIP CODE ERROR HANDLER
+function ccZipError(){
+  const zipRegex = (/^\d{1,5}$/);
+  let zipResult = false;
+  if (zipRegex.test(zip.value)) {
+        zipResult = true;
+  } else {
+    zipResult = false;
+  }
+  if (zipResult == true){
+    zip.style.borderColor = "green";
+    totalCorrect += 1;
+  } else if (zipResult == false){
+    zip.style.borderColor = "red";
+  };
+}
+
+//CVV ERROR HANDLER
+function cvvError(){
+  const cvvRegex = (/^\d{1,5}$/);
+  let cvvResult = false;
+  if (cvvRegex.test(cvv.value)) {
+        cvvResult = true;
+  } else {
+    cvvResult = false;
+  }
+  if (cvvResult == true){
+    cvv.style.borderColor = "green";
+    totalCorrect += 1;
+  } else if (cvvResult == false){
+    cvv.style.borderColor = "red";
+  };
+}
+
+//EMAIL ERROR HANDLER
+function emailError(){
+  const emailRegex = (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}/);
+  let emailResult = false;
+  if (emailRegex.test(emailInput.value)) {
+        emailResult = true;
+  } else {
+    emailResult = false;
+  }
+  if (emailResult == true){
+    emailInput.style.borderColor = "green";
+    totalCorrect += 1;
+  } else if (emailResult == false){
+    emailInput.style.borderColor = "red";
+  };
+}
+
+
+//CHECK AT LEAST ONE ACTIVITY IS CHECKED
+
+function activitiesError(){
+  for (let i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      return true;
+    }else {
+     return false;
+    }
+  }
 };
