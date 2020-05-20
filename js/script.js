@@ -221,6 +221,24 @@ form.addEventListener("submit", (e) => {
 
 //REGISTER BUTTON CLICK LISTNER - CHECKS IF ALL FIELDS ARE CORRECT AND TOTOALCORRECT = 5
 registerButton.addEventListener("click", (f) => {
+
+//CHECK IF CC NUM, ZIP AND CVV LENGTH IS  WRONG
+var numCheck = ccNum.value;
+if (numCheck.length <13 || numCheck.length > 16){
+  alert("Please enter a number that is between 13 and 16 digits long.");
+}
+
+var zipCheck = zip.value;
+if (zipCheck.length != 5){
+  alert("Enter a valid zip Code");
+}
+
+var cvvCheck = cvv.value;
+if (cvvCheck.length != 3){
+  alert("Enter a valid CVV Number");
+}
+
+//CLEAR ACITIVTY WARNINGS
 actWarning.innerHTML = "";
 
 //ENSURE AT LEAST 1 ACTIVITY IS CHOSEN
@@ -252,6 +270,7 @@ if(paymentMethod.value == paymentMethod[0].value){
   }
 });
 
+//INPUT LISTENERS ONCE INPUT ENTERED AND THEN ERROR CHECK
 nameInput.addEventListener("blur", nameError);
 emailInput.addEventListener("blur", emailError);
 ccNum.addEventListener("blur", ccNumError);
@@ -275,7 +294,7 @@ function nameError(){
   };
 }
 
-//CC NUM ERROR HANDLER
+//CC NUM ERROR HANDLER - TAKES VISA, AMERICA DISCOVER AND MASTERCARD - Regexlib.com
 function ccNumError(){
   const ccRegex = (/^(?:4[0-9]{12}(?:[0-9]{3})?)/) || (/^(?:5[1-5][0-9]{14})/) || (/^(?:3[47][0-9]{13})/) || (/^(?:6(?:011|5[0-9][0-9])[0-9]{12})/);
   let ccResult = false;
