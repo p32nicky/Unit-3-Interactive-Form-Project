@@ -25,11 +25,11 @@ colorDiv.hidden = true;
 document.getElementById('other-job').style.display = 'none';
 
 //Event listener for change to the job role. Then sends to function titleTest
-var e = document.getElementById("title");
-e.addEventListener("change", titleTest);
+var title = document.getElementById("title");
+title.addEventListener("change", titleTest);
 //Job title if other function
 function titleTest(){
-  let jobTitle = e.options[e.selectedIndex].text;
+  let jobTitle = title.options[title.selectedIndex].text;
   //If the jobTitle is other it will show the hidden div.
   if (jobTitle === 'Other'){
     document.getElementById('other-job').style.display = 'block';
@@ -147,13 +147,18 @@ const creditDiv = document.getElementById("credit-card");
 const paypalDiv = document.getElementById("paypal");
 const bitcoinDiv = document.getElementById("bitcoin");
 
-//HIDE ALL ON DEFAULT
-creditDiv.hidden = true;
+//SHOW CC ON DEFAULT AND HIDE OTHERS
+creditDiv.hidden = false;
 paypalDiv.hidden = true;
 bitcoinDiv.hidden = true;
 
+paymentMethod[1].selected = true;
+
 //CHECK PAYMENT METHOD CHANGE AND SHOW / HIDE DIVS
+
+
 paymentMethod.addEventListener('change', function(e){
+
 
 //CREDIT CARD
   const eventTarget = e.target.value;
@@ -161,7 +166,6 @@ paymentMethod.addEventListener('change', function(e){
   creditDiv.hidden =  false;
   paypalDiv.hidden = true;
   bitcoinDiv.hidden = true;
-  mustBeCorrect = 6;
 //PAYPAL
 } else if(eventTarget === paymentMethod[2].value){
     creditDiv.hidden =  true;
@@ -224,7 +228,7 @@ registerButton.addEventListener("click", (f) => {
 
 //CHECK IF CC NUM, ZIP AND CVV LENGTH IS  WRONG
 var numCheck = ccNum.value;
-if (numCheck.length <13 || numCheck.length > 16){
+if (numCheck.length <=13 || numCheck.length >= 16){
   alert("Please enter a number that is between 13 and 16 digits long.");
 }
 
@@ -353,6 +357,7 @@ function emailError(){
   let emailResult = false;
   if (emailRegex.test(emailInput.value)) {
         emailResult = true;
+        totalCorrect +=1; //NEWEST PLACEMENT
   } else {
     emailResult = false;
   }
