@@ -1,10 +1,11 @@
 //Color DOM Objects
 const colorPick = document.getElementById('color');
 const designPick = document.getElementById('design');
+const container = document.getElementsByClassName('container');
 
 //Activities DOM objects and price caculator
 const activities = document.getElementsByClassName("activities");
-var checkboxes = document.querySelectorAll('input[type=checkbox]');
+let checkboxes = document.querySelectorAll('input[type=checkbox]');
 let value = 0;
 
 //Total Labels
@@ -12,7 +13,9 @@ let activitySection = document.querySelector('.activities');
 let costLabel = document.createElement('h1') ;
 const actWarning = document.createElement('h1') ;
 let cost = document.createElement('h1');
+let checkCounter = 0;
 
+console.log(container);
 //Set focus on first input field
 document.getElementById('name').focus();
 
@@ -106,6 +109,7 @@ for(var i = 0; i < checkboxes.length; i++) {
     //console.log(value);
     if(clicked.checked){
       value += parseInt(clickedCost);
+      checkBoxError();
     } else {
     // If unclicked, subtract the value from the activityTotal
     value -= parseInt(clickedCost);
@@ -132,11 +136,9 @@ for(var i = 0; i < checkboxes.length; i++) {
 
 //PRINT ACTIVITES TOTAL
 function printTotal(value){
+  actWarning.innerHTML = '';
   costLabel.innerHTML = ("Your Cost For the Conference Will Be:");
   cost.innerHTML = ('$' + value);
-  //console.log(costLabel);
-  //console.log(cost);
-  //console.log(activitySection);
   activitySection.appendChild(costLabel);
   activitySection.appendChild(cost);
 }
@@ -147,12 +149,15 @@ const creditDiv = document.getElementById("credit-card");
 const paypalDiv = document.getElementById("paypal");
 const bitcoinDiv = document.getElementById("bitcoin");
 
-//SHOW CC ON DEFAULT AND HIDE OTHERS
-creditDiv.hidden = false;
-paypalDiv.hidden = true;
-bitcoinDiv.hidden = true;
+//ON WINDOW LOAD ONLY SHOWS DEFAULTS FOR PAYMENT METHOD
+window.addEventListener('load', () => {
+  creditDiv.hidden = false;
+  paypalDiv.hidden = true;
+  bitcoinDiv.hidden = true;
 
-paymentMethod[1].selected = true;
+  paymentMethod[1].selected = true;
+});
+//SHOW CC ON DEFAULT AND HIDE OTHERS
 
 //CHECK PAYMENT METHOD CHANGE AND SHOW / HIDE DIVS
 
@@ -166,21 +171,28 @@ paymentMethod.addEventListener('change', function(e){
   creditDiv.hidden =  false;
   paypalDiv.hidden = true;
   bitcoinDiv.hidden = true;
+  mustBeCorrect = 5;
 //PAYPAL
 } else if(eventTarget === paymentMethod[2].value){
     creditDiv.hidden =  true;
     paypalDiv.hidden = false;
     bitcoinDiv.hidden = true;
+    mustBeCorrect = 3;
+
 //BITCOIN
 } else if(eventTarget === paymentMethod[3].value){
     creditDiv.hidden =  true;
     paypalDiv.hidden = true;
     bitcoinDiv.hidden = false;
+    mustBeCorrect = 3;
+
 //ERROR HANDLER IF THEY GO BACK TO ZERO OPTION
   } else if(eventTarget === paymentMethod[0].value){
     creditDiv.hidden =  true;
     paypalDiv.hidden = true;
     bitcoinDiv.hidden = true;
+    mustBeCorrect = 3;
+
   //BITCOIN
   }
 });
@@ -203,7 +215,7 @@ const defaultOptionYear= document.createElement("option");
 
 const registerButton = document.querySelector('button[type="submit"]')
 let totalCorrect = 0;
-let mustBeCorrect = 3;
+let mustBeCorrect = 6;
 
 defaultOptionMonth.text = ("Pick Your Month");
 expMonth.insertBefore(defaultOptionMonth, expMonth[0]);
@@ -226,52 +238,48 @@ form.addEventListener("submit", (e) => {
 //REGISTER BUTTON CLICK LISTNER - CHECKS IF ALL FIELDS ARE CORRECT AND TOTOALCORRECT = 5
 registerButton.addEventListener("click", (f) => {
 
-//CHECK IF CC NUM, ZIP AND CVV LENGTH IS  WRONG
-var numCheck = ccNum.value;
-if (numCheck.length <=13 || numCheck.length >= 16){
-  alert("Please enter a number that is between 13 and 16 digits long.");
-}
 
-var zipCheck = zip.value;
-if (zipCheck.length != 5){
-  alert("Enter a valid zip Code");
-}
+//CHECK IF CC IS SELETED TO ADD VALUE TO MUSTBECORRECT OR NOT
 
-var cvvCheck = cvv.value;
-if (cvvCheck.length != 3){
-  alert("Enter a valid CVV Number");
-}
+//CHECK IF CC NUM, ZIP AND CVV LENGTH IS  WRONG ONLY FIRE WHEN CREDIT DIV IS VISIBLE
+  if(creditDiv.hidden ==  false){
+    var numCheck = ccNum.value;
+    if (numCheck.length <13 || numCheck.length > 16){
+      alert("Please enter a number that is between 13 and 16 digits long.");
+    }
 
-//CLEAR ACITIVTY WARNINGS
-actWarning.innerHTML = "";
+    var zipCheck = zip.value;
+    if (zipCheck.length != 5){
+      alert("Enter a valid zip Code");
+    }
 
-//ENSURE AT LEAST 1 ACTIVITY IS CHOSEN
-let checkCounter = 0;
-for (let i = 0; i < checkboxes.length; i++) {
-  if (checkboxes[i].checked) {
-      checkCounter += 1;
+    var cvvCheck = cvv.value;
+    if (cvvCheck.length != 3){
+      alert("Enter a valid CVV Number");
     }
   }
-if(checkCounter >=1){
-  totalCorrect +=1;
-}
-if (checkCounter == 0){
-  activitySection.appendChild(actWarning);
-  actWarning.innerHTML = "You need to select at least 1 activity";
-}
+  //CLEAR ACITIVTY WARNINGS
+  actWarning.innerHTML = "";
 
-//CHECK PAYMENT METHOD
-if(paymentMethod.value == paymentMethod[0].value){
-  alert('Choose a payment method first');
-}
+  //CHECK PAYMENT METHOD
+  if(paymentMethod.value == paymentMethod[0].value){
+    alert('Choose a payment method first');
+  }
 
-//IF ALL FIELDS CORRECT OR NOT
   if (totalCorrect == mustBeCorrect){
     alert("Congratulations on your purchase, we hope you enjoy!");
+    location.reload();
+
   }
   else{
-    alert("You haven't filled out all of the fields correctly yet. Please try again.")
+    alert("You haven't filled out all of the fields correctly yet. Please try again.");
+    if (checkCounter <= 0){
+      activitySection.appendChild(actWarning);
+      actWarning.innerHTML = "You need to select at least 1 activity";
+    }
   }
+  //IF ALL FIELDS CORRECT OR NOT
+
 });
 
 //INPUT LISTENERS ONCE INPUT ENTERED AND THEN ERROR CHECK
@@ -287,68 +295,56 @@ function nameError(){
   let nameResult = false;
   if (nameRegex.test(nameInput.value)) {
         nameResult = true;
-  } else {
-    nameResult = false;
-  }
-  if (nameResult == true){
+  } if (nameResult == true){
     nameInput.style.borderColor = "green";
     totalCorrect += 1;
   } else if (nameResult == false){
     nameInput.style.borderColor = "red";
-  };
+  }
 }
 
-//CC NUM ERROR HANDLER - TAKES VISA, AMERICA DISCOVER AND MASTERCARD - Regexlib.com
+//CC NUM ERROR HANDLER -
 function ccNumError(){
-  const ccRegex = (/^(?:4[0-9]{12}(?:[0-9]{3})?)/) || (/^(?:5[1-5][0-9]{14})/) || (/^(?:3[47][0-9]{13})/) || (/^(?:6(?:011|5[0-9][0-9])[0-9]{12})/);
+  const ccRegex = (/^[1-9][0-9]{12,15}$/);
   let ccResult = false;
   if (ccRegex.test(ccNum.value)) {
         ccResult = true;
-  } else {
-    ccResult = false;
-  }
-  if (ccResult == true){
+  } if (ccResult == true){
     ccNum.style.borderColor = "green";
     totalCorrect += 1;
   } else if (ccResult == false){
     ccNum.style.borderColor = "red";
-  };
+  }
 
 }
 
 
 //CC ZIP CODE ERROR HANDLER
 function ccZipError(){
-  const zipRegex = (/^\d{1,5}$/);
+  const zipRegex = (/^[1-9]{5}$/);
   let zipResult = false;
   if (zipRegex.test(zip.value)) {
         zipResult = true;
-  } else {
-    zipResult = false;
-  }
-  if (zipResult == true){
+  } if (zipResult == true){
     zip.style.borderColor = "green";
     totalCorrect += 1;
   } else if (zipResult == false){
     zip.style.borderColor = "red";
-  };
+  }
 }
 
 //CVV ERROR HANDLER
 function cvvError(){
-  const cvvRegex = (/^\d{1,5}$/);
+  const cvvRegex = (/^[1-9]{3}$/);
   let cvvResult = false;
   if (cvvRegex.test(cvv.value)) {
         cvvResult = true;
-  } else {
-    cvvResult = false;
-  }
-  if (cvvResult == true){
+  } if (cvvResult == true){
     cvv.style.borderColor = "green";
     totalCorrect += 1;
   } else if (cvvResult == false){
     cvv.style.borderColor = "red";
-  };
+  }
 }
 
 //EMAIL ERROR HANDLER
@@ -357,14 +353,23 @@ function emailError(){
   let emailResult = false;
   if (emailRegex.test(emailInput.value)) {
         emailResult = true;
-        totalCorrect +=1; //NEWEST PLACEMENT
-  } else {
-    emailResult = false;
-  }
-  if (emailResult == true){
+  } if (emailResult == true){
     emailInput.style.borderColor = "green";
-    totalCorrect += 1;
+    totalCorrect +=1;
   } else if (emailResult == false){
     emailInput.style.borderColor = "red";
-  };
+  }
+}
+
+//ENSURE AT LEAST 1 ACTIVITY IS CHOSEN
+function checkBoxError(){
+  for (let checkBoxCounter = 0; checkBoxCounter < checkboxes.length; checkBoxCounter++) {
+    if (checkboxes[checkBoxCounter].checked) {
+        checkCounter += 1;
+    }
+  }
+
+  if(checkCounter == 1){
+    totalCorrect +=1;
+  }
 }
