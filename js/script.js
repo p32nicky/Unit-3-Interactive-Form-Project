@@ -27,17 +27,20 @@ colorDiv.hidden = true;
 //First hide the Div containing other job label and text input
 document.getElementById('other-job').style.display = 'none';
 
+
 //Event listener for change to the job role. Then sends to function titleTest
 var title = document.getElementById("title");
 title.addEventListener("change", titleTest);
 //Job title if other function
 function titleTest(){
+  document.getElementById('other-job').style.display = 'none';
   let jobTitle = title.options[title.selectedIndex].text;
   //If the jobTitle is other it will show the hidden div.
   if (jobTitle === 'Other'){
     document.getElementById('other-job').style.display = 'block';
   }
 };
+
 
 // T-SHIRT INFO
 //Function to remove all existing color options and add default first option:
