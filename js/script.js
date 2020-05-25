@@ -158,16 +158,14 @@ window.addEventListener('load', () => {
   paypalDiv.hidden = true;
   bitcoinDiv.hidden = true;
 
+//DISABLED SELECT PAYMENT METHOD AS AN OPTION, BUT STILL LEFT VISIBLE
+  paymentMethod[0].disabled = true;
   paymentMethod[1].selected = true;
 });
 //SHOW CC ON DEFAULT AND HIDE OTHERS
 
 //CHECK PAYMENT METHOD CHANGE AND SHOW / HIDE DIVS
-
-
 paymentMethod.addEventListener('change', function(e){
-
-
 //CREDIT CARD
   const eventTarget = e.target.value;
   if(eventTarget === paymentMethod[1].value){
@@ -195,8 +193,6 @@ paymentMethod.addEventListener('change', function(e){
     paypalDiv.hidden = true;
     bitcoinDiv.hidden = true;
     mustBeCorrect = 3;
-
-  //BITCOIN
   }
 });
 
@@ -265,14 +261,16 @@ registerButton.addEventListener("click", (f) => {
   actWarning.innerHTML = "";
 
   //CHECK PAYMENT METHOD
-  if(paymentMethod.value == paymentMethod[0].value){
-    alert('Choose a payment method first');
-  }
+
+
 
   if (totalCorrect == mustBeCorrect){
     alert("Congratulations on your purchase, we hope you enjoy!");
     location.reload();
-
+//END APP AND RELOAD PAGE
+    if(paymentMethod.value == paymentMethod[0].value){
+      alert('Choose a payment method first');
+    }
   }
   else{
     alert("You haven't filled out all of the fields correctly yet. Please try again.");
@@ -281,7 +279,6 @@ registerButton.addEventListener("click", (f) => {
       actWarning.innerHTML = "You need to select at least 1 activity";
     }
   }
-  //IF ALL FIELDS CORRECT OR NOT
 
 });
 
@@ -371,7 +368,6 @@ function checkBoxError(){
         checkCounter += 1;
     }
   }
-
   if(checkCounter == 1){
     totalCorrect +=1;
   }
